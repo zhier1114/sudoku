@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: rgb(36, 36, 36);
+            display: flex;
+            height: 100vh;
+        }
+
+        #info {
+            /* background-color: aqua; */
+            width: 15%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 70px;
+            padding-bottom: 50px;
+        }
+
+        #difficulty {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            font-size: 40px;
+            /* background-color: burlywood; */
+            position: relative;
+        }
+
+        #difficulty span {
+            justify-content: center;
+            color: #fff;
+            width: 100%;
+            display: flex;
+
+        }
+
+        input[type="radio"] {
+            /* position: absolute;
+            opacity: 0; */
+            width: 32px;
+            height: 32px;
+            margin-right: 20px;
+            margin-top: 15px;
+        }
+
+        label {
+            display: flex;
+            justify-content: center;
+            /* background-color: brown; */
+            width: 100%;
+            color: white;
+            margin-top: 20px;
+        }
+
+        label:hover {
+            cursor: pointer;
+        }
+
+        #buttonContainer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            /* background-color: chartreuse; */
+        }
+
+        button {
+            width: 200px;
+            margin-top: 20px;
+            height: 90px;
+            font-size: 32px;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        #main {
+            /* background-color: bisque; */
+            width: 60%;
+            margin-top: 50px;
+            margin-left: -30px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+            border-radius: 5px;
+            width: 80%;
+            height: 80%;
+        }
+
+        td {
+            border: 1px solid black;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+        }
+
+
+        td:nth-child(3),
+        td:nth-child(6) {
+            border-right: 3px solid black;
+        }
+
+        tr:nth-of-type(3),
+        tr:nth-of-type(6) {
+            border-bottom: 3px solid black;
+        }
+
+        #board input {
+            width: 97%;
+            height: 100%;
+            text-align: center;
+            border: none;
+            font-size: 40px;
+        }
+
+        #board input::-webkit-inner-spin-button,
+        #board input::-webkit-outer-spin-button {
+            appearance: none;
+        }
+
+        #board input:focus {
+            outline: none;
+            background-color: aquamarine
+        }
+
+        .filled {
+            background-color: rgb(227, 227, 227);
+        }
+
+        #instructionsContainer {
+            width: 25%;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            flex-direction: column;
+        }
+
+        #timer {
+            /* background-color: aqua; */
+            font-size: 32px;
+            margin-bottom: 30px;
+            margin-top: 20px;
+            border-bottom: 2px solid #fff;
+            padding-bottom: 50px;
+        }
+
+        #instructions {
+            height: 80%;
+            width: 90%;
+            margin-left: -30px;
+            margin-right: 10px;
+            margin-top: 30px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #successContainer {
+            width: 28%;
+            height: 100%;
+            color: #fff;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            position: absolute;
+            background-color: rgb(36, 36, 36);
+            right: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #successContainer span {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        #failContainer {
+            width: 28%;
+            height: 100%;
+            color: #fff;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            position: absolute;
+            background-color: rgb(36, 36, 36);
+            right: 0;
+            z-index: 1;
+        }
+
+        #checkInfoContainer {
+            width: 28%;
+            height: 100%;
+            color: #fff;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            position: absolute;
+            background-color: rgb(36, 36, 36);
+            right: 0;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">
+        <form id="difficulty">
+            <span>選擇難度：</span>
+            <label for="easy"><input type="radio" name="difficulty" id="easy" value="easy">簡單</label>
+            <label for="medium"><input type="radio" name="difficulty" id="medium" value="medium" checked>中等</label>
+            <label for="hard"><input type="radio" name="difficulty" id="hard" value="hard">困難</label>
+        </form>
+        <div id="buttonContainer">
+            <button id="newGame">新的一局</button>
+            <button id="check">檢查答案</button>
+            <!-- <button id="note">註記模式</button> -->
+        </div>
+    </div>
+    <div id="main">
+        <table id="board"></table>
+    </div>
+    <div id="instructionsContainer">
+        <div id="instructions">
+            <div id="timer">花費時間：&nbsp;&nbsp;<span id="showTime">180</span>&nbsp;&nbsp;秒</div>
+            <h1>遊戲規則：</h1>
+            <h3>1. 每一行及每一列分別填入數字 1 ~ 9</h3>
+            <h3>2. 同一行不能有相同的數字</h3>
+            <h3>3. 同一列不能有相同的數字</h3>
+            <h3>4. 同一個九宮格內不能有相同的數字</h3>
+            <h3>5. 把 81 個格子完全填滿後即遊戲結束</h3>
+        </div>
+    </div>
+    <div id="successContainer">
+        <span>恭喜完成！</span>
+        <span>用時：<span id="showTime2">180</span>&nbsp;秒</span>
+    </div>
+    <div id="failContainer">
+        <span>似乎有錯呢...</span>
+    </div>
+    <div id="checkInfoContainer">
+        <span></span>
+    </div>
+</body>
+<script src="./sudoku.js"></script>
+
+</html>
