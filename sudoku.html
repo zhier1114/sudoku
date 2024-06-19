@@ -85,11 +85,35 @@
         }
 
         #main {
-            /* background-color: bisque; */
             width: 60%;
-            margin-top: 50px;
+            margin-top: 20px;
             margin-left: -30px;
         }
+
+        #noteContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        #noteText {
+            color: #fff;
+            font-size: 36px;
+            width: 25%;
+            margin-top: -10px;
+        }
+
+        #note[type="checkbox"] {
+            width: 30px;
+            margin-right: 20px;
+        }
+
+        #noteContainer span {
+            font-size: 20px;
+        }
+
 
         table {
             border-collapse: collapse;
@@ -97,6 +121,7 @@
             border-radius: 5px;
             width: 80%;
             height: 80%;
+            /* background-color: #fff; */
         }
 
         td {
@@ -109,12 +134,12 @@
 
         td:nth-child(3),
         td:nth-child(6) {
-            border-right: 3px solid black;
+            border-right: 4px solid black;
         }
 
         tr:nth-of-type(3),
         tr:nth-of-type(6) {
-            border-bottom: 3px solid black;
+            border-bottom: 4px solid black;
         }
 
         #board input {
@@ -132,12 +157,36 @@
 
         #board input:focus {
             outline: none;
-            background-color: aquamarine
+            background-color: rgb(127, 255, 212)
         }
+
+        .note-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            /* border: 1px solid #000; */
+            /* background-color: bisque; */
+            z-index: 2;
+            /* background-color: #fff; */
+            border: unset;
+            pointer-events: none;
+        }
+
+        .note-grid div {
+            /* border: 1px solid #ddd; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgb(61, 61, 61);
+            border: unset;
+            pointer-events: none;
+        }
+
 
         .filled {
             background-color: rgb(227, 227, 227);
         }
+
 
         #instructionsContainer {
             width: 25%;
@@ -232,11 +281,15 @@
         <div id="buttonContainer">
             <button id="newGame">新的一局</button>
             <button id="check">檢查答案</button>
-            <!-- <button id="note">註記模式</button> -->
         </div>
     </div>
     <div id="main">
         <table id="board"></table>
+        <div id="noteContainer">
+
+            <label for="note" id="noteText"><input type="checkbox" id="note">筆記模式</label>
+            <span>(command鍵)</span>
+        </div>
     </div>
     <div id="instructionsContainer">
         <div id="instructions">
@@ -259,7 +312,7 @@
     <div id="checkInfoContainer">
         <span></span>
     </div>
+    <script src="./sudoku.js"></script>
 </body>
-<script src="./sudoku.js"></script>
 
 </html>

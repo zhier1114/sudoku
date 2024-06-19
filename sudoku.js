@@ -1,6 +1,7 @@
 // 建立空盤
 let board = Array.from({ length: 9 }, () => Array(9).fill(0));
 let boardWithHoles = Array.from({ length: 9 }, () => Array(9).fill(0));
+let noteMode = false;
 
 // 檢查數字有無符合規則
 function isValid(board, row, col, num) {
@@ -103,16 +104,49 @@ function displayBoard() {
   let inputNum = document.querySelectorAll(".inputNum");
   inputNum.forEach((input) => {
     input.addEventListener("input", () => {
-      if (!/^\d$/.test(input.value)) {
-        input.value = ""; // 清空非數字輸入
-        return;
-      }
       const row = parseInt(input.dataset.row);
       const col = parseInt(input.dataset.col);
-      boardWithHoles[row][col] = parseInt(input.value);
-
-      checkIfComplete();
+      if (!/^\d$/.test(input.value) || input.value == 0) {
+        input.value = ""; // 清空非數字輸入
+        document.getElementById(`${row}` + `${col}`).style.display = "grid";
+        return;
+      }
+      if (input.value !== "") {
+        if (noteMode == true) {
+          // let cellId = `${row}` + `${col}` + `${input.value}`;
+          let cell = document.getElementById(
+            `${row}` + `${col}` + `${input.value}`
+          );
+          if (cell.innerHTML == "") {
+            cell.innerHTML = input.value;
+          } else {
+            cell.innerHTML = "";
+          }
+          input.value = "";
+          // let cell = document.getElementsByClassName(".note-cell");
+          boardWithHoles[row][col] = "";
+          return;
+        } else {
+          document.getElementById(`${row}` + `${col}`).style.display = "none";
+          boardWithHoles[row][col] = parseInt(input.value);
+          checkIfComplete();
+        }
+      }
     });
+
+    // input.addEventListener("keydown", (event) => {
+    //   if (noteMode && /^[1-9]$/.test(event.key)) {
+    //     const row = parseInt(input.dataset.row);
+    //     const col = parseInt(input.dataset.col);
+    //     let cell = document.getElementById(
+    //       `${row}` + `${col}` + `${input.value}`
+    //     );
+    //     if (cell) {
+    //       cell.innerHTML = cell.innerHTML === "" ? event.key : "";
+    //     }
+    //     event.preventDefault(); // 阻止輸入框顯示數字
+    //   }
+    // });
   });
 }
 
@@ -122,8 +156,9 @@ function checkIfComplete() {
   let correct = false;
   let inputs = Array.from(document.querySelectorAll(".myAnswers"));
   inputs.forEach((input) => {
-    if (input.value === "") {
+    if (input.value == "") {
       count++;
+      console.log(count);
     }
   });
   if (count === 0) {
@@ -160,6 +195,8 @@ function startGame() {
   generateNumber();
   removeNumbers(difficulty);
   displayBoard();
+  cleanNoteGrid();
+  createNoteGrid();
   time = 0;
   document.getElementById("showTime").innerHTML = `${time}`;
   clearInterval(intervalId);
@@ -204,9 +241,69 @@ function checkAnswer() {
 
 document.getElementById("check").addEventListener("click", checkAnswer);
 
+// 計時器
 let time = 0;
 let intervalId;
 function timer() {
   time++;
   document.getElementById("showTime").innerHTML = time;
 }
+
+// 註記模式
+
+document.getElementById("note").addEventListener("change", {
+  handleEvent(event) {
+    if (event.target.checked) {
+      noteMode = true;
+    } else {
+      noteMode = false;
+    }
+  },
+});
+
+function createNoteGrid() {
+  const myAnswers = document.querySelectorAll(".myAnswers");
+  myAnswers.forEach((input) => {
+    const row = parseInt(input.dataset.row);
+    const col = parseInt(input.dataset.col);
+    const noteGrid = document.createElement("div");
+    noteGrid.className = "note-grid note-mode-inactive";
+    noteGrid.id = `${row}` + `${col}`;
+    for (let i = 1; i <= 9; i++) {
+      const noteCell = document.createElement("div");
+      noteCell.id = `${row}` + `${col}` + `${i}`;
+      noteCell.classList.add("note-cell");
+      // noteCell.textContent = noteCell.id;
+      noteGrid.appendChild(noteCell);
+    }
+
+    const rect = input.getBoundingClientRect();
+
+    noteGrid.style.position = "absolute";
+    noteGrid.style.left = `${rect.left}px`;
+    noteGrid.style.top = `${rect.top - 1}px`;
+    noteGrid.style.width = `${rect.width}px`;
+    noteGrid.style.height = `${rect.height}px`;
+
+    document.body.appendChild(noteGrid);
+  });
+}
+
+function cleanNoteGrid() {
+  const noteGrids = document.querySelectorAll(".note-grid");
+  noteGrids.forEach((noteGrid) => {
+    document.body.removeChild(noteGrid);
+  });
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.metaKey) {
+    if (noteMode == false) {
+      noteMode = true;
+      document.getElementById("note").checked = true;
+    } else {
+      noteMode = false;
+      document.getElementById("note").checked = false;
+    }
+  }
+});
